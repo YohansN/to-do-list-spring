@@ -1,7 +1,9 @@
 package com.yohansdev.To.Do.List.services;
 
+import com.yohansdev.To.Do.List.infra.exceptions.TaskNotFoundException;
 import com.yohansdev.To.Do.List.models.Task;
 import com.yohansdev.To.Do.List.models.dtos.CreateTaskDto;
+import com.yohansdev.To.Do.List.models.dtos.TaskResponseDto;
 import com.yohansdev.To.Do.List.models.dtos.UpdateTaskDto;
 import com.yohansdev.To.Do.List.repositories.TaskRepository;
 import jakarta.transaction.Transactional;
@@ -17,10 +19,10 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     @Transactional
-    public boolean createTask(@Valid CreateTaskDto taskDto){
+    public TaskResponseDto createTask(@Valid CreateTaskDto taskDto){
         Task newTask = new Task(taskDto);
         taskRepository.save(newTask);
-        return true;
+        return new TaskResponseDto(newTask.getTitle(), newTask.getDescription(), newTask.getDeadline());
     }
 
     public List<Task> getAllTasks(){
@@ -28,14 +30,14 @@ public class TaskService {
     }
 
     @Transactional
-    public Optional<Task> updateTask(@Valid UpdateTaskDto taskDto){
+    public Task updateTask(@Valid UpdateTaskDto taskDto){
         Optional<Task> taskOptional = taskRepository.findById(taskDto.id());
         if(taskOptional.isEmpty())
-            return Optional.empty();
+            throw new TaskNotFoundException();
 
         Task task = taskOptional.get();
 
-        //Verificação para atualizar os valores caso estes sejam passados no parametro.
+        //Verificação para atualizar os valores caso estes sejam passados como parametro.
         if(!taskDto.title().isBlank() && !taskDto.title().isEmpty())
             task.setTitle(taskDto.title());
         if(!taskDto.description().isBlank() && !taskDto.description().isEmpty())
@@ -43,17 +45,15 @@ public class TaskService {
         if(taskDto.deadline() != null)
             task.setDeadline(taskDto.deadline());
 
-        return Optional.of(task);
+        return task;
     }
 
     @Transactional
-    public boolean deleteTask(Long taskId){
+    public void deleteTask(Long taskId){
         Optional<Task> taskToBeDeletedOptional = taskRepository.findById(taskId);
         if (taskToBeDeletedOptional.isEmpty())
-            return false;
-
+            throw new TaskNotFoundException();
         Task taskToBeDeleted = taskToBeDeletedOptional.get();
         taskRepository.delete(taskToBeDeleted);
-        return true;
     }
 }

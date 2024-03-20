@@ -2,14 +2,20 @@ package com.yohansdev.To.Do.List.controllers;
 
 import com.yohansdev.To.Do.List.models.Task;
 import com.yohansdev.To.Do.List.models.dtos.CreateTaskDto;
+import com.yohansdev.To.Do.List.models.dtos.TaskResponseDto;
 import com.yohansdev.To.Do.List.models.dtos.UpdateTaskDto;
 import com.yohansdev.To.Do.List.services.TaskService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/task")
 public class TaskController {
@@ -24,23 +30,20 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity createTask(@Valid @RequestBody CreateTaskDto createTaskDto){
-        if(taskService.createTask(createTaskDto))
-            return ResponseEntity.ok().build();
-        return ResponseEntity.badRequest().build();
+        TaskResponseDto taskCreated = taskService.createTask(createTaskDto);
+        return ResponseEntity.ok(taskCreated);
     }
 
     @PutMapping
     public ResponseEntity updateTask(@Valid @RequestBody UpdateTaskDto updateTaskDto){
-        var taskOp = taskService.updateTask(updateTaskDto);
-        if(taskOp.isPresent())
-            return ResponseEntity.ok(taskOp);
-        return ResponseEntity.notFound().build();
+        Task task = taskService.updateTask(updateTaskDto);
+        return ResponseEntity.ok(task);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteTask(@PathVariable Long id){
-        if(taskService.deleteTask(id))
-            return ResponseEntity.ok().build();
-        return ResponseEntity.notFound().build();
+    public ResponseEntity deleteTask(@PathVariable @NotNull(message = "O ID não pode ser nulo.")
+                                         @Positive(message = "O ID deve ser positivo.") Long id){
+        taskService.deleteTask(id);
+        return ResponseEntity.ok().build();
     }
 }
