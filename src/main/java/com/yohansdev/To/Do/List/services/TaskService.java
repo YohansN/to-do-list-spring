@@ -1,5 +1,8 @@
 package com.yohansdev.To.Do.List.services;
 
+import com.yohansdev.To.Do.List.infra.exceptions.DeleteTaskException;
+import com.yohansdev.To.Do.List.infra.exceptions.GetTasksException;
+import com.yohansdev.To.Do.List.infra.exceptions.TaskCreationException;
 import com.yohansdev.To.Do.List.infra.exceptions.TaskNotFoundException;
 import com.yohansdev.To.Do.List.models.Task;
 import com.yohansdev.To.Do.List.models.dtos.CreateTaskDto;
@@ -21,12 +24,20 @@ public class TaskService {
     @Transactional
     public TaskResponseDto createTask(@Valid CreateTaskDto taskDto){
         Task newTask = new Task(taskDto);
-        taskRepository.save(newTask);
+        try {
+            taskRepository.save(newTask);
+        }catch (Exception exception){
+            throw new TaskCreationException();
+        }
         return new TaskResponseDto(newTask.getTitle(), newTask.getDescription(), newTask.getDeadline());
     }
 
     public List<Task> getAllTasks(){
-        return taskRepository.findAllByOrderByDeadlineAsc();
+        try {
+            return taskRepository.findAllByOrderByDeadlineAsc();
+        }catch (Exception exception){
+            throw new GetTasksException();
+        }
     }
 
     @Transactional
@@ -51,9 +62,14 @@ public class TaskService {
     @Transactional
     public void deleteTask(Long taskId){
         Optional<Task> taskToBeDeletedOptional = taskRepository.findById(taskId);
-        if (taskToBeDeletedOptional.isEmpty())
-            throw new TaskNotFoundException();
+        if (taskToBeDeletedOptional.isEmpty()) throw new TaskNotFoundException();
+
         Task taskToBeDeleted = taskToBeDeletedOptional.get();
-        taskRepository.delete(taskToBeDeleted);
+
+        try{
+            taskRepository.delete(taskToBeDeleted);
+        }catch (Exception ex){
+            throw new DeleteTaskException();
+        }
     }
 }

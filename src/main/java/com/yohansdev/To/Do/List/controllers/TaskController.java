@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class TaskController {
     @Operation(summary = "Realiza o cadastro de uma nova tarefa.", method = "POST")
     public ResponseEntity createTask(@Valid @RequestBody CreateTaskDto createTaskDto){
         TaskResponseDto taskCreated = taskService.createTask(createTaskDto);
-        return ResponseEntity.ok(taskCreated);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createTaskDto);
     }
 
     @PutMapping
@@ -43,11 +44,11 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     @Operation(summary = "Apagar uma tarefa.", method = "DELETE")
     public ResponseEntity deleteTask(@PathVariable @NotNull(message = "O ID não pode ser nulo.")
                                          @Positive(message = "O ID deve ser positivo.") Long id){
         taskService.deleteTask(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Tarefa excluída com sucesso.");
     }
 }
