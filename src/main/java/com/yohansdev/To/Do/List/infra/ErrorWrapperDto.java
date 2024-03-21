@@ -11,7 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class ErrorWrapperDto {
+public class ErrorWrapperDto { //Classe para padronizar e deixar retorno de exception mais "clean" e legível.
     private HttpStatus statusCode;
     private String message;
     private Map<String, String> validationErrors;
