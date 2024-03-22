@@ -1,17 +1,17 @@
 # Desafio Técnico Backend - [NUVEN]
 O projeto consiste na implementação de uma API REST com funcionalidades de **To-Do list** em Java Spring Boot.
 
-### Funcionalidades
+## Funcionalidades
 - Cadastro de nova tarefa.
 - Visualização de tarefas cadastradas.
 - Atualização de tarefa.
 - Remoção de tarefa.
 
-### Como rodar o projeto e seus testes
+## Como rodar o projeto e seus testes
 **Pré-requisito:** Ter o [Docker](https://www.docker.com) instalado.
 1. Clone este repositório.
    ```
-   git clone https://github.com/YohansN/to-do-list-spring
+   git clone https://github.com/YohansN/to-do-list-spring.git
    ```
 
 2. Vá até o diretório base do projeto.
@@ -27,12 +27,12 @@ O projeto consiste na implementação de uma API REST com funcionalidades de **T
 4. Agora a aplicação está disponível em:
 - Localmente: http://localhost:8080/todo/task
 - Documentação Swagger: http://localhost:8080/swagger-ui/index.html
-  **OBS:** A aplicação também está disponível de forma remota em: www
+- **OBS:** A aplicação também está disponível de forma remota em: https://nuven-todo.onrender.com/todo/task
 
-  6.  Para parar a execução e excluir os containers use o comando:
-      ```
-      docker-compose down
-      ```
+5. Para parar a execução e excluir os containers use o comando:
+    ```
+    docker-compose down
+    ```
 **OU**
 <details>
 	<summary><strong>Caso não tenha o Docker instalado</strong></summary>
@@ -55,7 +55,7 @@ O projeto consiste na implementação de uma API REST com funcionalidades de **T
     mvn test
     ```
 
-### End-Points/Rotas
+## End-Points/Rotas
 POST ```/todo/task``` - Retorna cadastra uma nova tarefa.
 
 GET ```/todo/task``` - Retorna a lista de tarefas cadastradas.
@@ -64,10 +64,10 @@ PUT ```/todo/task```  - Atualiza uma tarefa existente.
 
 DELETE ```todo/task/{id}``` - Remove uma tarefa.
 
-### Tecnologias
+## Tecnologias
 - Java
 - Spring Boot
-- Spring Web - 
+- Spring Web
 - Spring Data JPA - Repositório simplificado para comunicação do a DB.
 - PostgreSQL - Banco de dados sequencial da aplicação.
 - H2 DB - Banco de dados utilizado para testes.
