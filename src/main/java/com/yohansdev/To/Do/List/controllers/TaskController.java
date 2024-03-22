@@ -34,7 +34,7 @@ public class TaskController {
     @Operation(summary = "Realiza o cadastro de uma nova tarefa.", method = "POST")
     public ResponseEntity createTask(@Valid @RequestBody CreateTaskDto createTaskDto){
         TaskResponseDto taskCreated = taskService.createTask(createTaskDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createTaskDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskCreated);
     }
 
     @PutMapping
