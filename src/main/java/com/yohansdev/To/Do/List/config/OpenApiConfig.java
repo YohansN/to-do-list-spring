@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
                         url = "https://yohans-dev.netlify.app"
                 ),
                 description = "API para gerenciamento de tarefas.",
-                title = "To Do List - NUVEM",
+                title = "To Do List - NUVEN",
                 version = "1.0"
         ))
 public class OpenApiConfig {

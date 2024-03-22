@@ -6,15 +6,15 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=to-do-list-nuvem
-      - POSTGRES_USER=post
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=to-do-list-nuven
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=post
 
   spring-app:
-    image: yohansdocker0/todo-nuvem:latest
+    image: yohansdocker0/todo-nuven:latest
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/to-do-list-nuvem
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/to-do-list-nuven
     depends_on:
       - postgres-db
